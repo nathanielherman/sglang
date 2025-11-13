@@ -474,8 +474,11 @@ pub async fn concurrency_limit_middleware(
 
     // Try to acquire token immediately
     if token_bucket.try_acquire(1.0).await.is_ok() {
-        debug!("Acquired token immediately");
+        info!("Acquired token immediately");
+        time = Instant::now();
         let response = next.run(request).await;
+        let latency = time.elapsed();
+        info!("Request processed in {:?}", latency);
 
         // Return the token to the bucket
         token_bucket.return_tokens(1.0).await;
@@ -484,7 +487,7 @@ pub async fn concurrency_limit_middleware(
     } else {
         // No tokens available, try to queue if enabled
         if let Some(queue_tx) = &app_state.concurrency_queue_tx {
-            debug!("No tokens available, attempting to queue request");
+            info!("No tokens available, attempting to queue request");
 
             // Create a channel for the token response
             let (permit_tx, permit_rx) = oneshot::channel();

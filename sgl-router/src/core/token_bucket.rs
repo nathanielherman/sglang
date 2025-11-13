@@ -59,7 +59,7 @@ impl TokenBucket {
         inner.tokens = (inner.tokens + refill_amount).min(self.capacity);
         inner.last_refill = now;
 
-        trace!(
+        info!(
             "Token bucket: {} tokens available, requesting {}",
             inner.tokens,
             tokens
@@ -67,7 +67,7 @@ impl TokenBucket {
 
         if inner.tokens >= tokens {
             inner.tokens -= tokens;
-            debug!(
+            info!(
                 "Token bucket: acquired {} tokens, {} remaining",
                 tokens, inner.tokens
             );
