@@ -4,7 +4,7 @@ use std::{
 };
 
 use tokio::sync::{Mutex, Notify};
-use tracing::{debug, trace};
+use tracing::{debug, trace, info};
 
 /// Token bucket for rate limiting
 ///

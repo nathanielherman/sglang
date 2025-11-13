@@ -475,7 +475,7 @@ pub async fn concurrency_limit_middleware(
     // Try to acquire token immediately
     if token_bucket.try_acquire(1.0).await.is_ok() {
         info!("Acquired token immediately");
-        time = Instant::now();
+        let time = Instant::now();
         let response = next.run(request).await;
         let latency = time.elapsed();
         info!("Request processed in {:?}", latency);
